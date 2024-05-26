@@ -72,15 +72,25 @@ fn add_employee(company: &mut HashMap<String, Vec<String>>, s: &str) {
     // Syntax Add <staff> to <dept>. Add has already been eaten
     let mut name = String::new();
     let mut dept = String::new();
-    let mut i = 0;
-    // TODO: Support multiple names by appending words to name until "to" is found
+    let mut found_to: bool = false;
+
+    // TODO: Support multiple person and department names by using "to" to flip modes
     for word in s.split_whitespace() {
-        match i {
-            0 => name = word.to_string(),
-            2 => dept = word.to_string(),
-            _ => {},
+        if word != "to" {
+            if found_to {
+                if dept.len() > 0 {
+                    dept = dept + " ";
+                }
+                dept = dept + &word.to_string();
+            } else {
+                if name.len() > 0 {
+                    name = name + " ";
+                }
+                name = name + &word.to_string();
+            }
+        } else {
+            found_to = true;
         }
-        i += 1;
     }
     if name.len() == 0 || dept.len() == 0 {
         println!("Error: Expected syntax `Add <name> to <department>");
@@ -88,7 +98,7 @@ fn add_employee(company: &mut HashMap<String, Vec<String>>, s: &str) {
         // YAGNI: Case sensitive or not?
         // Are we adding or modifying?
         if company.contains_key(&dept) {
-            let mut old_staff = company.get_mut(&dept).unwrap();
+            let old_staff = company.get_mut(&dept).unwrap();
             old_staff.push(name);
         } else {
             let mut new_staff = Vec::new();
