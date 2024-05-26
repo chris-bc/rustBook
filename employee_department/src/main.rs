@@ -21,7 +21,7 @@ fn main() {
             Some(n) => cmd_str[0..n].to_lowercase(),
             None => cmd_str[0..].trim().to_lowercase(),
         };
-        println!("First word :{first_word}:");
+
         // Match the first word to figure out what we're doing
         match &first_word[0..] {
             "quit" => {
@@ -37,7 +37,6 @@ fn main() {
 
 fn list_departments(company: &HashMap<String, Vec<String>>, s: &str) {
     // s should either have a length of 0 or begin with the second word entered
-    println!("List departments - s is {}", s.len());
     if s.len() == 0 {
         list_all_departments(company);
     } else {
@@ -83,15 +82,14 @@ fn add_employee(company: &mut HashMap<String, Vec<String>>, s: &str) {
         println!("Error: Expected syntax `Add <name> to <department>");
     } else {
         // YAGNI: Case sensitive or not?
-        // Fetch or create a mutable staff vector
-        let old_staff = company.get_mut(&dept);
-        let mut new_staff: Vec<String> = Vec::new();
-        // Rust says the following doesn't need to be mutable. Not sure about that
-        let old_staff = match old_staff {
-            Some(n) => n,
-            None => &mut new_staff,
-        };
-        old_staff.push(name);
-        //company.insert(dept, *old_staff);
+        // Are we adding or modifying?
+        if company.contains_key(&dept) {
+            let mut old_staff = company.get_mut(&dept).unwrap();
+            old_staff.push(name);
+        } else {
+            let mut new_staff = Vec::new();
+            new_staff.push(name);
+            company.insert(dept, new_staff);
+        }
     }
 }
