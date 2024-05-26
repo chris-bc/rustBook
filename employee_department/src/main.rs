@@ -56,11 +56,15 @@ fn list_all_departments(company: &HashMap<String, Vec<String>>) {
 }
 
 fn list_department(company: &HashMap<String, Vec<String>>, dept: &String) {
-    let mut staff = company.get(dept).unwrap_or(&Vec::new()).clone();
-    staff.sort_unstable();
-    println!("Department: {dept}");
-    for s in staff {
-        println!("  - {s}");
+    if company.contains_key(dept) {
+        let mut staff = company.get(dept).unwrap_or(&Vec::new()).clone();
+        staff.sort_unstable();
+        println!("Department: {dept}");
+        for s in staff {
+            println!("  - {s}");
+        }
+    } else {
+        println!("ERROR: {dept} is not a valid department");
     }
 }
 
