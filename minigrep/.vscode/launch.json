@@ -7,6 +7,22 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Launch no args",
+            "cargo": {
+                "args": [
+                    "build",
+                ],
+                "filter": {
+                    "name": "minigrep",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Launch with args",
             "cargo": {
                 "args": [
