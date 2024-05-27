@@ -34,7 +34,8 @@
                 }
             },
             "args": [
-                "test",
+                "-i",
+                "to",
                 "poem.txt",
             ],
             "cwd": "${workspaceFolder}"

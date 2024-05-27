@@ -10,13 +10,21 @@ pub struct Config {
 
 impl Config {
     pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("Usage: minigrep <pattern> <filename>");
+        if args.len() < 3 || (args.len() == 3 && args[1] == "-i") {
+            return Err("Usage: minigrep [-i] <pattern> <filename>");
         }
         
-        let query = args[1].clone();
-        let file_path = args[2].clone();
-        let ignore_case = env::var("IGNORE_CASE").is_ok();
+        let query: String;
+        let file_path: String;
+        let mut ignore_case = args.len() == 4;
+        if ignore_case {
+            query = args[2].clone();
+            file_path = args[3].clone();
+        } else {
+            query = args[1].clone();
+            file_path = args[2].clone();
+            ignore_case = env::var("IGNORE_CASE").is_ok();
+        }
 
         Ok(Config { query, file_path, ignore_case })
     }
