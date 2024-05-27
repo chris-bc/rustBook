@@ -19,7 +19,7 @@
             },
             "args": [
                 "test",
-                "sample.txt",
+                "poem.txt",
             ],
             "cwd": "${workspaceFolder}"
         },
