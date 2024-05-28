@@ -27,4 +27,18 @@ fn main() {
     println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
     println!("Can rect1 hold rect4? {}", rect1.can_hold(&rect4));
+
+    // chapter 13
+    let mut num_sort_ops = 0;
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+
+    list.sort_by_key(|r| {
+        num_sort_ops += 1;
+        r.width
+    });
+    println!("{:#?}, sorted in {num_sort_ops} operations", list);
 }
