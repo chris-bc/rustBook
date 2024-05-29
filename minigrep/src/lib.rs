@@ -9,22 +9,32 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 || (args.len() == 3 && args[1] == "-i") {
-            return Err("Usage: minigrep [-i] <pattern> <filename>");
-        }
-        
-        let query: String;
-        let file_path: String;
-        let mut ignore_case = args.len() == 4;
-        if ignore_case {
-            query = args[2].clone();
-            file_path = args[3].clone();
-        } else {
-            query = args[1].clone();
-            file_path = args[2].clone();
-            ignore_case = env::var("IGNORE_CASE").is_ok();
-        }
+    pub fn build(
+        mut args: impl Iterator<Item = String>,
+    ) -> Result<Config, &'static str> {
+        let mut ignore_case = false;
+        args.next();
+
+        let query = match args.next() {
+            Some(arg) => {
+                if arg == "-i".to_string() {
+                    ignore_case = true;
+                    match args.next() {
+                        Some(arg) => arg,
+                        None => return Err("Ignoring case but didn't get a query string\nUsage: minigrep [-i] <pattern> <filename>"),
+                    }
+                } else {
+                    arg
+                }
+            },
+            None => return Err("Didn't get a query string\nUsage: minigrep [-i] <pattern> <filename>"),
+        };
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file path\nUsage: minigrep [-i] <pattern> <filename>"),
+        };
+
+        ignore_case = ignore_case || env::var("IGNORE_CASE").is_ok();
 
         Ok(Config { query, file_path, ignore_case })
     }
