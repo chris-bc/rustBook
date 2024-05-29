@@ -1,6 +1,8 @@
 [package]
 name = "documentation"
+description = "This project explores a variety of documentation methods available in rust."
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
 
 [dependencies]
