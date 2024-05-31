@@ -13,8 +13,13 @@ impl Post {
         }
     }
 
-    pub fn add_text(&mut self, text: &str) {
-        self.content.push_str(text);
+    pub fn add_text<'a>(&mut self, text: &'a str) -> Result<&'a str, ()> {
+        if self.state.as_ref().unwrap().can_edit(self) {
+            self.content.push_str(text);
+            Ok(text)
+        } else {
+            Err(())
+        }
     }
 
     pub fn content(&self) -> &str {
@@ -47,6 +52,9 @@ trait State {
     fn content<'a>(&self, post: &'a Post) -> &'a str {
         ""
     }
+    fn can_edit(&self, post: &Post) -> bool {
+        false
+    }
 }
 
 struct Draft {}
@@ -62,6 +70,10 @@ impl State for Draft {
 
     fn reject(self: Box<Self>) -> Box<dyn State> {
         self
+    }
+
+    fn can_edit(&self, post: &Post) -> bool {
+        true
     }
 }
 
