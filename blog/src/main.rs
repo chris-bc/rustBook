@@ -3,33 +3,20 @@ use blog::Post;
 fn main() {
     let mut post = Post::new();
 
-    let res = post.add_text("I ate a salad for lunch today");
+    assert!(post.add_text("I ate a salad for lunch today").is_ok());
     assert_eq!("", post.content());
-    if let Ok(_) = res {
-        assert!(true);
-    } else {
-        assert!(false);
-    }
 
     post.request_review();
     assert_eq!("", post.content());
 
     // Should not be able to add text in review
-    if let Err(_) = post.add_text("Some text") {
-        assert!(true);
-    } else {
-        assert!(false);
-    }
+    assert!(post.add_text("Some text").is_err());
 
     post.reject();
     assert_eq!("", post.content());
 
     // Back in draft and should be able to edit again
-    if let Ok(_) = post.add_text("More text") {
-        assert!(true);
-    } else {
-        assert!(false);
-    }
+    assert!(post.add_text("More text").is_ok());
 
     post.request_review();
     assert_eq!("", post.content());

@@ -119,3 +119,25 @@ impl State for Published {
         &post.content
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn can_only_edit_in_draft() {
+        let mut post = Post::new();
+        assert!(post.add_text("Some text").is_ok());
+
+        post.request_review();
+        assert!(post.add_text(" more text").is_err());
+
+        // Back in draft
+        post.reject();
+        assert!(post.add_text(" some more text").is_ok());
+
+        post.request_review();
+        post.approve();
+        assert!(post.add_text("text").is_err());
+    }
+}
