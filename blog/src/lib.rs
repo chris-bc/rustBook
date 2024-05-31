@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+
 pub struct Post {
     state: Option<Box<dyn State>>,
     content: String,
@@ -51,7 +53,7 @@ struct Draft {}
 
 impl State for Draft {
     fn request_review(self: Box<Self>) -> Box<dyn State> {
-        Box::new(PendingReview {})
+        Box::new(PendingReview { approve_count: RefCell::new(0) })
     }
 
     fn approve(self: Box<Self>) -> Box<dyn State> {
@@ -63,7 +65,9 @@ impl State for Draft {
     }
 }
 
-struct PendingReview {}
+struct PendingReview {
+    approve_count: RefCell<u8>,
+}
 
 impl State for PendingReview {
     fn request_review(self: Box<Self>) -> Box<dyn State> {
@@ -71,7 +75,12 @@ impl State for PendingReview {
     }
 
     fn approve(self: Box<Self>) -> Box<dyn State> {
-        Box::new(Published {})
+        if *self.approve_count.borrow() == 0 {
+            *self.approve_count.borrow_mut() +=1;
+            self
+        } else {
+            Box::new(Published {})
+        }
     }
 
     fn reject(self: Box<Self>) -> Box<dyn State> {
