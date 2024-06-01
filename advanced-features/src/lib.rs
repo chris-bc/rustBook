@@ -1,5 +1,14 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+struct Counter {
+    value: u32,
+}
+
+impl Iterator for Counter {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        //
+        Some(42)
+    }
 }
 
 #[cfg(test)]
@@ -8,7 +17,6 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        assert_eq!(4, 4);
     }
 }
