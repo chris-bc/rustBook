@@ -100,6 +100,12 @@ fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
     f(arg) + f(arg)
 }
 
+#[derive(Debug)]
+enum Status {
+    Value(u32),
+    Stop,
+}
+
 fn main() {
     assert_eq!(
         Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
@@ -121,5 +127,9 @@ fn main() {
 
     let answer = do_twice(add_one, 5);
     println!("The answer is {}", answer);
+
+    let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
+    println!("List of statuses: {:?}", list_of_statuses);
+
 }
 
