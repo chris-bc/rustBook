@@ -130,6 +130,8 @@ fn main() {
 
     let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
     println!("List of statuses: {:?}", list_of_statuses);
+    let closure_list: Vec<Status> = (0u32..20).map(|i| Status::Value(i)).collect();
+    println!("Closue list: {:?}", closure_list);
 
 }
 
