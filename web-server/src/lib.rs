@@ -1,3 +1,31 @@
+//! # Lightweight Web Server
+//! 
+//! The application currently shuts down after serving two requests in order to
+//! test the thread coordination and shutdown process. To remove this limit modify
+//! ```fn main()``` in ```main.rs```. Find the following line:
+//! ```
+//! for stream in listener.incoming().take(2) { // Limit to 2 connections to test thread shutdown
+//!     // Snip
+//! }
+//! ```
+//! Replace this with
+//! ```
+//! for stream in listener.incoming() {
+//!     // Snip
+//! }
+//! ```
+//! 
+//! ## ToDo
+//! 
+//! * Add more documentation to ```ThreadPool``` and its public methods;
+//! * Add tests of the library's functionality;
+//! * Change calls to ```unwrap()``` to do more robust error handling;
+//! * Use ```ThreadPool``` to perform some task other than serving web requests;
+//! * Find a thread pool crate on [crates.io](https://crates.io) and implement a
+//!   similar web server using the crate instead. Then compare its API and robustness
+//!   to the thread pool we implemented.
+//! 
+
 use std::{
     sync::{mpsc, Arc, Mutex},
     thread,
